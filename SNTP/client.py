@@ -8,6 +8,7 @@ NTP_SERVER = 'localhost'
 
 def get_time():
     client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     data = sntp.SNTPPacket().to_bytes()
     client.sendto(data, (NTP_SERVER, 123))
     data, address = client.recvfrom(1024)
