@@ -176,7 +176,7 @@ class SNTPPacket:
                f'Precision: {round(2 ** self.__precision, 6)} sec\n' \
                f'Root Delay: {self.__root_delay} seconds\n' \
                f'Root Dispersion: {self.__root_dispersion} seconds\n' \
-               f'Reference Identifier: {_pretty_ref_id(self.__reference_id, self.__stratum, self.__mode)}\n' \
+               f'Reference Identifier: {_pretty_ref_id(self.__reference_id, self.__stratum)}\n' \
                f'Reference Timestamp: {_pretty_timestamp(self.__reference_timestamp)}\n' \
                f'Originate Timestamp: {_pretty_timestamp(self.__originate_timestamp)}\n' \
                f'Receive Timestamp: {_pretty_timestamp(self.__receive_timestamp)}\n' \
@@ -231,21 +231,18 @@ def _pretty_stratum(stratum):
         raise SNTPException('invalid stratum filed.')
 
 
-def _pretty_ref_id(ref_id, stratum, mode):
+def _pretty_ref_id(ref_id, stratum):
     """Reference Identifier to pretty string."""
-    if mode == 4:
-        if 0 <= stratum <= 1:
-            text = '{}{}{}{}'.format(*ref_id)
-            if text in REF_ID_TABLE:
-                return REF_ID_TABLE[text]
-            else:
-                return text
-        elif 2 <= stratum <= 255:
-            return '{}.{}.{}.{}'.format(*ref_id)
+    if 0 <= stratum <= 1:
+        text = '{}{}{}{}'.format(*ref_id)
+        if text in REF_ID_TABLE:
+            return REF_ID_TABLE[text]
         else:
-            raise SNTPException('invalid reference identifier flied.')
+            return text
+    elif 2 <= stratum <= 255:
+        return '{}.{}.{}.{}'.format(*ref_id)
     else:
-        return 'NULL'
+        raise SNTPException('invalid reference identifier flied.')
 
 
 def _pretty_timestamp(ts):

@@ -28,6 +28,7 @@ def main():
                 print(f'Handle connection from: {addr}')
                 request = sntp.SNTPPacket()
                 request.from_bytes(data)
+                print(f"Client's request:\n{str(request)}")
                 response = sntp.SNTPPacket(originate_timestamp=request.transmit_timestamp,
                                            receive_timestamp=time.time() + args.lie, transmit_timestamp=time.time(),
                                            stratum=2, mode=4, ref_id=get_ref_id(sock))

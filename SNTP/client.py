@@ -16,7 +16,7 @@ def get_time():
         print('Response received from:', address)
     response = sntp.SNTPPacket()
     response.from_bytes(data)
-    print(str(response))
+    print(f"Server's response:\n{str(response)}")
 
 
 if __name__ == '__main__':
