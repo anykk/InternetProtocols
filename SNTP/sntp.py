@@ -1,21 +1,8 @@
-"""SNTP tools."""
 import bitstring
 import datetime
+import time
 
-TIME1970 = 2208988800
-
-REF_ID_TABLE = {
-    'DNC': "DNC routing protocol",
-    'NIST': "NIST public modem",
-    'TSP': "TSP time protocol",
-    'DTS': "Digital Time Service",
-    'ATOM': "Atomic clock (calibrated)",
-    'VLF': "VLF radio (OMEGA, etc)",
-    'callsign': "Generic radio",
-    'LORC': "LORAN-C radionavidation",
-    'GOES': "GOES UHF environment satellite",
-    'GPS': "GPS UHF satellite positioning",
-}
+TIME1970 = 2208988800  # Offset
 
 STRATUM_TABLE = {
     0: "kiss-o'-death message",
@@ -23,17 +10,17 @@ STRATUM_TABLE = {
 }
 
 MODE_TABLE = {
-    0: "unspecified",
+    0: "reserved",
     1: "symmetric active",
     2: "symmetric passive",
     3: "client",
     4: "server",
     5: "broadcast",
-    6: "reserved for NTP control messages",
+    6: "reserved for NTP control messages",  # May it be in SNTP?
     7: "reserved for private use",
 }
 
-LEAP_TABLE = {
+LI_TABLE = {
     0: "no warning",
     1: "last minute has 61 seconds",
     2: "last minute has 59 seconds",
@@ -41,16 +28,8 @@ LEAP_TABLE = {
 }
 
 
-class SNTPException(Exception):
-    """SNTP exception."""
-    pass
-
-
 class SNTPPacket:
-    """SNTPv3 packet class.
-
-    Mode 3 cause it works only with IPv4.
-    ...full docstring will be here..."""
+    """SNTP packet class."""
 
     def __init__(self, li=0,
                  vn=3, mode=3,
@@ -61,8 +40,8 @@ class SNTPPacket:
                  reference_timestamp=0,
                  originate_timestamp=0,
                  receive_timestamp=0,
-                 transmit_timestamp=0):
-        """Initialize the SNTPv3 (by default) packet."""
+                 transmit_timestamp=time.time()):
+        """Initialize the SNTP (by default - client's request) packet."""
         self.__li = li
         self.__vn = vn
         self.__mode = mode
@@ -72,10 +51,10 @@ class SNTPPacket:
         self.__root_delay = _to1616(delay)
         self.__root_dispersion = _to1616(dispersion)
         self.__reference_id = ref_id
-        self.__reference_timestamp = _to_timestamp(reference_timestamp)
-        self.__originate_timestamp = _to_timestamp(originate_timestamp)
-        self.__receive_timestamp = _to_timestamp(receive_timestamp)
-        self.__transmit_timestamp = _to_timestamp(transmit_timestamp)
+        self.__reference_timestamp = _to_timestamp(reference_timestamp)  # last set or corrected
+        self.__originate_timestamp = _to_timestamp(originate_timestamp)  # req departed the C for the S
+        self.__receive_timestamp = _to_timestamp(receive_timestamp)  # req/reply arrived at the S/C
+        self.__transmit_timestamp = _to_timestamp(transmit_timestamp)  # req/reply departed the C/S
 
     @property
     def li(self):
@@ -130,10 +109,10 @@ class SNTPPacket:
         return self.__transmit_timestamp
 
     def from_bytes(self, data):
-        """Decode data and set up packet fields if we can."""
+        """Decode data and set up packet's fields if we can."""
         bs = bitstring.Bits(data)
         if len(bs) < 48:
-            raise SNTPException('invalid SNTP packet.')
+            return False
         self.__li = bs[0:2].uint
         self.__vn = bs[2:5].uint
         self.__mode = bs[5:8].uint
@@ -147,6 +126,7 @@ class SNTPPacket:
         self.__originate_timestamp = _from_timestamp(bs[192:256].uint)
         self.__receive_timestamp = _from_timestamp(bs[256:320].uint)
         self.__transmit_timestamp = _from_timestamp(bs[320:384].uint)
+        return True
 
     def to_bytes(self):
         """Encode packet to utf-8 byte sequence."""
@@ -176,7 +156,7 @@ class SNTPPacket:
                f'Precision: {round(2 ** self.__precision, 6)} sec\n' \
                f'Root Delay: {self.__root_delay} seconds\n' \
                f'Root Dispersion: {self.__root_dispersion} seconds\n' \
-               f'Reference Identifier: {_pretty_ref_id(self.__reference_id, self.__stratum)}\n' \
+               f'Reference Identifier: {_pretty_ref_id(self.__reference_id, self.__mode)}\n' \
                f'Reference Timestamp: {_pretty_timestamp(self.__reference_timestamp)}\n' \
                f'Originate Timestamp: {_pretty_timestamp(self.__originate_timestamp)}\n' \
                f'Receive Timestamp: {_pretty_timestamp(self.__receive_timestamp)}\n' \
@@ -205,18 +185,13 @@ def _from_timestamp(s):
 
 def _pretty_li(li):
     """Leap indicator to pretty string."""
-    if li in LEAP_TABLE:
-        return f'{li} ({LEAP_TABLE[li]})'
-    else:
-        raise SNTPException('invalid leap indicator field.')
+    if li in LI_TABLE:
+        return f'{li} ({LI_TABLE[li]})'
 
 
 def _pretty_mode(mode):
     """Mode to pretty string."""
-    if mode in MODE_TABLE:
-        return f'{mode} ({MODE_TABLE[mode]})'
-    else:
-        raise SNTPException('invalid mode field.')
+    return f'{mode} ({MODE_TABLE[mode]})'
 
 
 def _pretty_stratum(stratum):
@@ -227,27 +202,16 @@ def _pretty_stratum(stratum):
         return f'{stratum} (secondary reference)'
     elif 16 <= stratum <= 255:
         return f'{stratum} (reserved)'
-    else:
-        raise SNTPException('invalid stratum filed.')
 
 
-def _pretty_ref_id(ref_id, stratum):
+def _pretty_ref_id(ref_id, mode):
     """Reference Identifier to pretty string."""
-    if 0 <= stratum <= 1:
-        text = '{}{}{}{}'.format(*ref_id)
-        if text in REF_ID_TABLE:
-            return REF_ID_TABLE[text]
-        else:
-            return text
-    elif 2 <= stratum <= 255:
+    if mode == 4:
         return '{}.{}.{}.{}'.format(*ref_id)
     else:
-        raise SNTPException('invalid reference identifier flied.')
+        return 'NULL'
 
 
 def _pretty_timestamp(ts):
     """Timestamp to pretty string."""
-    try:
-        return str(datetime.datetime.utcfromtimestamp(ts)) + ' UTC'
-    except OSError:
-        raise SNTPException('invalid timestamp.')
+    return str(datetime.datetime.utcfromtimestamp(ts)) + ' UTC'
