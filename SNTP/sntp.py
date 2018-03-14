@@ -4,9 +4,11 @@ import time
 
 TIME1970 = 2208988800  # Offset
 
-STRATUM_TABLE = {
-    0: "kiss-o'-death message",
-    1: "primary reference",
+LI_TABLE = {
+    0: "no warning",
+    1: "last minute has 61 seconds",
+    2: "last minute has 59 seconds",
+    3: "alarm condition (clock not synchronized)",
 }
 
 MODE_TABLE = {
@@ -15,16 +17,12 @@ MODE_TABLE = {
     2: "symmetric passive",
     3: "client",
     4: "server",
-    5: "broadcast",
-    6: "reserved for NTP control messages",  # May it be in SNTP?
-    7: "reserved for private use",
+    5: "broadcast"
 }
 
-LI_TABLE = {
-    0: "no warning",
-    1: "last minute has 61 seconds",
-    2: "last minute has 59 seconds",
-    3: "alarm condition (clock not synchronized)",
+STRATUM_TABLE = {
+    0: "kiss-o'-death message",
+    1: "primary reference",
 }
 
 
@@ -36,7 +34,7 @@ class SNTPPacket:
                  stratum=0, poll=0,
                  precision=0, delay=0,
                  dispersion=0,
-                 ref_id=(0, 0, 0, 0),
+                 ref_id=0,
                  reference_timestamp=0,
                  originate_timestamp=0,
                  receive_timestamp=0,
@@ -111,8 +109,6 @@ class SNTPPacket:
     def from_bytes(self, data):
         """Decode data and set up packet's fields if we can."""
         bs = bitstring.Bits(data)
-        if len(bs) < 48:
-            return False
         self.__li = bs[0:2].uint
         self.__vn = bs[2:5].uint
         self.__mode = bs[5:8].uint
@@ -121,12 +117,11 @@ class SNTPPacket:
         self.__precision = bs[24:32].int
         self.__root_delay = _from1616(bs[32:64].int)
         self.__root_dispersion = _from1616(bs[64:96].uint)
-        self.__reference_id = tuple(bs[96:128].unpack('4*uint: 8'))
+        self.__reference_id = bs[96:128].hex
         self.__reference_timestamp = _from_timestamp(bs[128:192].uint)
         self.__originate_timestamp = _from_timestamp(bs[192:256].uint)
         self.__receive_timestamp = _from_timestamp(bs[256:320].uint)
         self.__transmit_timestamp = _from_timestamp(bs[320:384].uint)
-        return True
 
     def to_bytes(self):
         """Encode packet to utf-8 byte sequence."""
@@ -139,7 +134,7 @@ class SNTPPacket:
         bs[24:32] = bitstring.pack('int: 8', self.__precision)
         bs[32:64] = bitstring.pack('int: 32', self.__root_delay)
         bs[64:96] = bitstring.pack('int: 32', self.__root_dispersion)
-        bs[96:128] = bitstring.pack('4*uint: 8', *self.__reference_id)
+        bs[96:128] = bitstring.BitStream(self.__reference_id)
         bs[128:192] = bitstring.pack('uint: 64', self.__reference_timestamp)
         bs[192:256] = bitstring.pack('uint: 64', self.__originate_timestamp)
         bs[256:320] = bitstring.pack('uint: 64', self.__receive_timestamp)
@@ -156,7 +151,7 @@ class SNTPPacket:
                f'Precision: {round(2 ** self.__precision, 6)} sec\n' \
                f'Root Delay: {self.__root_delay} seconds\n' \
                f'Root Dispersion: {self.__root_dispersion} seconds\n' \
-               f'Reference Identifier: {_pretty_ref_id(self.__reference_id, self.__mode)}\n' \
+               f'Reference Identifier: {self.__reference_id}\n' \
                f'Reference Timestamp: {_pretty_timestamp(self.__reference_timestamp)}\n' \
                f'Originate Timestamp: {_pretty_timestamp(self.__originate_timestamp)}\n' \
                f'Receive Timestamp: {_pretty_timestamp(self.__receive_timestamp)}\n' \
@@ -202,14 +197,6 @@ def _pretty_stratum(stratum):
         return f'{stratum} (secondary reference)'
     elif 16 <= stratum <= 255:
         return f'{stratum} (reserved)'
-
-
-def _pretty_ref_id(ref_id, mode):
-    """Reference Identifier to pretty string."""
-    if mode == 4:
-        return '{}.{}.{}.{}'.format(*ref_id)
-    else:
-        return 'NULL'
 
 
 def _pretty_timestamp(ts):

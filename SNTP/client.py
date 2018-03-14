@@ -1,4 +1,3 @@
-"""SNTPv3 client for test."""
 import sntp
 import socket
 
