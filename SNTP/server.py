@@ -8,7 +8,7 @@ import time
 def parse_args():
     """Just arg's parse."""
     parser = argparse.ArgumentParser(description='simple sntp server implementation')
-    parser.add_argument('lie', nargs='?', default=60, type=int, help='seconds to lie')
+    parser.add_argument('lie', nargs='?', default=0, type=int, help='seconds to lie')
     return parser.parse_args()
 
 
@@ -25,7 +25,8 @@ def main():
             request.from_bytes(data)
             print(f"Client's request:\n{str(request)}")
             sock.sendto(sntp.SNTPPacket(vn=request.vn, stratum=1, originate_timestamp=request.transmit_timestamp,
-                                        receive_timestamp=recv_t, transmit_timestamp=time.time()).to_bytes(), addr)
+                                        receive_timestamp=recv_t, transmit_timestamp=time.time() + args.lie).to_bytes(),
+                        addr)
 
 
 if __name__ == '__main__':
