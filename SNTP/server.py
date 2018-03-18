@@ -36,7 +36,7 @@ def main():
                 request = sntp.SNTPPacket()
                 request.from_bytes(data)
                 print(f"Client's request:\n{str(request)}")
-                trans_time = time.time() + args.lie + 1.0
+                trans_time = time.time() + args.lie
                 sock.sendto(sntp.SNTPPacket(vn=request.vn,
                                             mode=mode_to_reply(request.mode),
                                             stratum=1,
@@ -46,6 +46,9 @@ def main():
                                             originate_timestamp=request.transmit_timestamp + args.lie,
                                             receive_timestamp=recv_time,
                                             transmit_timestamp=trans_time).to_bytes(), addr)
+
+            except KeyboardInterrupt:
+                sys.exit()
             except Exception as exception:
                 print(str(exception), file=sys.stderr)
 
@@ -53,7 +56,5 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except KeyboardInterrupt:
-        sys.exit()
     except Exception as exception:
         sys.exit(exception)
