@@ -21,7 +21,7 @@ def parse_args():
 
 def trace_to(domain):
     try:
-        return subprocess.check_output(shlex.split(f'tracert -w 7 {domain}')).decode('cp866')
+        return subprocess.check_output(shlex.split(f'tracert -w 350 {domain}')).decode('cp866')
     except subprocess.CalledProcessError:
         sys.exit('Failed to trace.')
 
