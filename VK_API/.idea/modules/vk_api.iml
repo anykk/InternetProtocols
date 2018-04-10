@@ -22,16 +22,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sbt: org.scala-lang:scala-library:2.12.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.fasterxml.jackson.core:jackson-annotations:2.3.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.fasterxml.jackson.core:jackson-core:2.3.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.fasterxml.jackson.core:jackson-databind:2.3.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.thoughtworks.paranamer:paranamer:2.6:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.json4s:json4s-ast_2.12:3.2.11:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.json4s:json4s-core_2.12:3.2.11:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.json4s:json4s-jackson_2.12:3.2.11:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.scala-lang:scala-compiler:2.12.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.scala-lang:scala-reflect:2.12.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.scala-lang:scalap:2.12.5:jar" level="project" />
     <orderEntry type="library" name="sbt: org.scala-lang.modules:scala-xml_2.12:1.0.6:jar" level="project" />
   </component>
 </module>

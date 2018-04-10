@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VK.iml" filepath="$PROJECT_DIR$/.idea/modules/VK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/vk_api.iml" filepath="$PROJECT_DIR$/.idea/modules/vk_api.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/vk_api-build.iml" filepath="$PROJECT_DIR$/.idea/modules/vk_api-build.iml" />
     </modules>
   </component>
