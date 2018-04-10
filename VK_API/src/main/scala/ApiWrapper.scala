@@ -7,7 +7,7 @@ trait ApiWrapper {
     s"https://api.vk.com/method/$method_name.xml?${parameters.mkString("&")}&v=$v"
   }
 
-  def mkQuery(method_name: String, v: String, parameters: Seq[String]): Try[Elem] = {
+  protected def mkQuery(method_name: String, v: String, parameters: Seq[String]): Try[Elem] = {
     Try[Elem] {
       XML.load(mkUrl(method_name, v, parameters))
     }
