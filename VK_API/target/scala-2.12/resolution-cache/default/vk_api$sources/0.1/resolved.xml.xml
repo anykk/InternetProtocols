@@ -4,7 +4,7 @@
 		module="vk_api$sources"
 		revision="0.1"
 		status="integration"
-		publication="20180410221628"
+		publication="20180413215728"
 	/>
 	<configurations>
 		<conf name="compile" visibility="public" description=""/>
