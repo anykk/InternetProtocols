@@ -14,7 +14,7 @@
       <file leaf-file-name="pop3.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pop3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="87">
+            <state relative-caret-position="1054">
               <caret line="65" column="18" selection-start-line="65" selection-start-column="18" selection-end-line="65" selection-end-column="18" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
@@ -26,8 +26,8 @@
       <file leaf-file-name="msg183.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/msg183.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="20" column="11" lean-forward="true" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="11" />
+            <state relative-caret-position="340">
+              <caret line="20" column="11" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -72,7 +72,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -84,6 +83,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -164,6 +164,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -195,6 +196,33 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/pop3.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1105">
+          <caret line="65" column="18" selection-start-line="65" selection-start-column="18" selection-end-line="65" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/msg183.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="11" lean-forward="true" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/message.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pop3.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="9" column="41" selection-start-line="9" selection-start-column="41" selection-end-line="9" selection-end-column="41" />
           <folding>
@@ -202,9 +230,6 @@
           </folding>
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msg1.txt">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/message.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -225,19 +250,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/msg1.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/msg182.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="20" column="29" lean-forward="true" selection-start-line="20" selection-end-line="20" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/msg182.txt" />
     <entry file="file://$PROJECT_DIR$/pop3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
+        <state relative-caret-position="1054">
           <caret line="65" column="18" selection-start-line="65" selection-start-column="18" selection-end-line="65" selection-end-column="18" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
@@ -247,8 +263,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/msg183.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="20" column="11" lean-forward="true" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="11" />
+        <state relative-caret-position="340">
+          <caret line="20" column="11" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="11" />
         </state>
       </provider>
     </entry>
